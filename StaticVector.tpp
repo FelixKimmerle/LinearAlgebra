@@ -298,3 +298,10 @@ template <class T, unsigned int N>
 StaticVector<T, N>::~StaticVector()
 {
 }
+
+template <class T, unsigned int N>
+StaticVector<T, N>::StaticVector(const StaticVector<T, N> &other)
+{
+    m_Data = other.m_Data;
+    std::cout << "Vector Coppy :|" << std::endl;
+}

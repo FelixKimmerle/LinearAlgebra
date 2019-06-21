@@ -183,6 +183,47 @@ StaticMatrix<T, X, Y> StaticMatrix<T, X, Y>::operator*(T scalar) const
 }
 
 template <class T, unsigned int X, unsigned int Y>
+void StaticMatrix<T, X, Y>::operator/=(T scalar)
+{
+    T factor = T(1) / scalar;
+    for (auto &&row : m_Data)
+    {
+        for (auto &&item : row)
+        {
+            item *= factor;
+        }
+    }
+}
+template <class T, unsigned int X, unsigned int Y>
+StaticMatrix<T, X, Y> StaticMatrix<T, X, Y>::operator/(T scalar) const
+{
+    T factor = T(1) / scalar;
+    StaticMatrix<T, X, Y> result;
+    for (size_t x = 0; x < X; x++)
+    {
+        for (size_t y = 0; y < Y; y++)
+        {
+            result.m_Data[x][y] = m_Data[x][y] * factor;
+        }
+    }
+
+    return result;
+}
+template <class T, unsigned int X, unsigned int Y>
+
+void StaticMatrix<T, X, Y>::div(T scalar, StaticMatrix<T, X, Y> &result) const
+{
+    T factor = T(1) / scalar;
+    for (size_t x = 0; x < X; x++)
+    {
+        for (size_t y = 0; y < Y; y++)
+        {
+            result.m_Data[x][y] = m_Data[x][y] * factor;
+        }
+    }
+}
+
+template <class T, unsigned int X, unsigned int Y>
 template <unsigned int OY>
 StaticMatrix<T, X, OY> StaticMatrix<T, X, Y>::operator*(const StaticMatrix<T, Y, OY> &other) const
 {
@@ -215,33 +256,6 @@ StaticVector<T, X> StaticMatrix<T, X, Y>::operator*(const StaticVector<T, Y> &ot
 }
 
 template <class T, unsigned int X, unsigned int Y>
-void StaticMatrix<T, X, Y>::operator/=(T scalar)
-{
-    T factor = T(1) / scalar;
-    for (auto &&row : m_Data)
-    {
-        for (auto &&item : row)
-        {
-            item *= factor;
-        }
-    }
-}
-template <class T, unsigned int X, unsigned int Y>
-StaticMatrix<T, X, Y> StaticMatrix<T, X, Y>::operator/(T scalar) const
-{
-    T factor = T(1) / scalar;
-    StaticMatrix<T, X, Y> result;
-    for (size_t x = 0; x < X; x++)
-    {
-        for (size_t y = 0; y < Y; y++)
-        {
-            result.m_Data[x][y] = m_Data[x][y] * factor;
-        }
-    }
-
-    return result;
-}
-template <class T, unsigned int X, unsigned int Y>
 template <unsigned int OY>
 StaticMatrix<T, X, OY> StaticMatrix<T, X, Y>::cross(const StaticMatrix<T, Y, OY> &other) const
 {
@@ -257,6 +271,34 @@ StaticMatrix<T, X, OY> StaticMatrix<T, X, Y>::cross(const StaticMatrix<T, Y, OY>
         }
     }
     return result;
+}
+
+template <class T, unsigned int X, unsigned int Y>
+template <unsigned int OY>
+void StaticMatrix<T, X, Y>::cross(const StaticMatrix<T, Y, OY> &other, StaticMatrix<T, X, OY> &result) const
+{
+    for (unsigned int x = 0; x < X; x++)
+    {
+        for (unsigned int y = 0; y < OY; y++)
+        {
+            for (unsigned int k = 0; k < Y; k++)
+            {
+                result[x][y] += m_Data[x][k] * other[k][y];
+            }
+        }
+    }
+}
+
+template <class T, unsigned int X, unsigned int Y>
+void StaticMatrix<T, X, Y>::cross(const StaticVector<T, Y> &other, StaticVector<T, X> &result) const
+{
+    for (unsigned int x = 0; x < X; x++)
+    {
+        for (unsigned int k = 0; k < Y; k++)
+        {
+            result[x] += m_Data[x][k] * other[k];
+        }
+    }
 }
 
 template <class T, unsigned int X, unsigned int Y>
@@ -357,6 +399,17 @@ StaticMatrix<T, Y, X> StaticMatrix<T, X, Y>::transpose() const
     }
     return result;
 }
+template <class T, unsigned int X, unsigned int Y>
+void StaticMatrix<T, X, Y>::transpose(StaticMatrix<T, Y, X> &result) const
+{
+    for (size_t x = 0; x < X; x++)
+    {
+        for (size_t y = 0; y < Y; y++)
+        {
+            result[y][x] = m_Data[x][y];
+        }
+    }
+}
 
 template <class T, unsigned int X, unsigned int Y>
 StaticMatrix<T, X, Y> StaticMatrix<T, X, Y>::adjoint() const
@@ -388,6 +441,37 @@ StaticMatrix<T, X, Y> StaticMatrix<T, X, Y>::adjoint() const
             }
         }
         return result;
+    }
+}
+
+template <class T, unsigned int X, unsigned int Y>
+void StaticMatrix<T, X, Y>::adjoint(StaticMatrix<T, X, Y> &result) const
+{
+    if (X != Y)
+    {
+        throw MathException("Adjoint is only defined for square matrices.");
+    }
+    else
+    {
+        if (X == 1)
+        {
+            result[0][0] = 1;
+        }
+        else
+        {
+            T sign = T(1);
+            std::array<std::array<T, Y>, X> temp;
+
+            for (unsigned int i = 0; i < X; i++)
+            {
+                for (unsigned int j = 0; j < X; j++)
+                {
+                    getCofactor(m_Data, temp, i, j, X);
+                    sign = ((i + j) % 2 == 0) ? T(1) : T(-1);
+                    result[j][i] = sign * determinant(temp, X - 1);
+                }
+            }
+        }
     }
 }
 
@@ -432,7 +516,20 @@ StaticMatrix<T, X, Y> StaticMatrix<T, X, Y>::inverse() const
         throw MathException("Singular matrix, can't find its inverse");
     }
     StaticMatrix<T, X, Y> adj = adjoint();
-    return adj / d;
+    adj /= d;
+    return adj;
+}
+template <class T, unsigned int X, unsigned int Y>
+void StaticMatrix<T, X, Y>::inverse(StaticMatrix<T, X, Y> &result) const
+{
+    T d = det();
+    if (d == T(0))
+    {
+        throw MathException("Singular matrix, can't find its inverse");
+    }
+
+    adjoint(result);
+    result /= d;
 }
 
 template <class T, unsigned int X, unsigned int Y>
@@ -459,6 +556,19 @@ StaticVector<T, X> StaticMatrix<T, X, Y>::asvector() const
         result[i] = m_Data[i][0];
     }
     return result;
+}
+
+template <class T, unsigned int X, unsigned int Y>
+void StaticMatrix<T, X, Y>::asvector(StaticVector<T, X> &result) const
+{
+    if (Y != 1)
+    {
+        throw MathException("Matrix is not a vector.");
+    }
+    for (size_t i = 0; i < X; i++)
+    {
+        result[i] = m_Data[i][0];
+    }
 }
 
 template <class T, unsigned int X, unsigned int Y>
@@ -532,4 +642,11 @@ StaticMatrix<T, X, Y>::StaticMatrix(const std::array<std::array<T, Y>, X> &init)
 template <class T, unsigned int X, unsigned int Y>
 StaticMatrix<T, X, Y>::~StaticMatrix()
 {
+}
+
+template <class T, unsigned int X, unsigned int Y>
+StaticMatrix<T, X, Y>::StaticMatrix(const StaticMatrix<T, X, Y> &other)
+{
+    m_Data = other.m_Data;
+    std::cout << "Matrix Coppy :|" << std::endl;
 }

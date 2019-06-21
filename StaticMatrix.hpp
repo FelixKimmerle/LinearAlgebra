@@ -45,13 +45,13 @@ public:
     template <unsigned int OY>
     StaticMatrix<T, X, OY> operator*(const StaticMatrix<T, Y, OY> &other) const;
 
-    template <unsigned int OY>
-    void cross(const StaticMatrix<T, Y, OY> &other, StaticMatrix<T, X, OY> &result) const;
+    StaticVector<T, X> operator*(const StaticVector<T, Y> &other) const;
 
     template <unsigned int OY>
     StaticMatrix<T, X, OY> cross(const StaticMatrix<T, Y, OY> &other) const;
 
-    StaticVector<T, X> operator*(const StaticVector<T, Y> &other) const;
+    template <unsigned int OY>
+    void cross(const StaticMatrix<T, Y, OY> &other, StaticMatrix<T, X, OY> &result) const;
 
     void cross(const StaticVector<T, Y> &other, StaticVector<T, X> &result) const;
 
@@ -79,6 +79,7 @@ public:
 
     StaticMatrix(bool init = true);
     StaticMatrix(const std::array<std::array<T, Y>, X> &init);
+    StaticMatrix(const StaticMatrix<T, X, Y> &other);
     ~StaticMatrix();
 };
 

@@ -55,6 +55,7 @@ public:
 
     StaticVector(bool init = true);
     StaticVector(const std::array<T, N> &init);
+    StaticVector(const StaticVector<T, N> &other);
     ~StaticVector();
 };
 

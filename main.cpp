@@ -62,4 +62,10 @@ int main()
 
     std::cout << (mat.inverse() * erg) << std::endl;
     std::cout << sizeof(mat) << std::endl;
+
+    StaticMatrix<float, 4, 4> madjinv;
+    madj.inverse(madjinv);
+    StaticMatrix<float, 4, 4> madjres;
+    madjinv.cross(madj, madjres);
+    std::cout << madjres << std::endl;
 }
