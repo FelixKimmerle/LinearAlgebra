@@ -1,9 +1,9 @@
 #
 # Compiler flags
 #
-CC     = g++ -I./ -I./Imgui/
+CC     = g++ -I./
 CFLAGS = -Wall -std=c++17
-LIBS	= #-lsfml-system -lsfml-window -lsfml-graphics
+LIBS	= 
 #
 # Project files
 #

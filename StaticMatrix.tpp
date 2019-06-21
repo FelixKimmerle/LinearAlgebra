@@ -106,6 +106,17 @@ StaticMatrix<T, X, Y> StaticMatrix<T, X, Y>::operator+(T scalar) const
 
     return result;
 }
+template <class T, unsigned int X, unsigned int Y>
+void StaticMatrix<T, X, Y>::add(T scalar, StaticMatrix<T, X, Y> &result) const
+{
+    for (size_t x = 0; x < X; x++)
+    {
+        for (size_t y = 0; y < Y; y++)
+        {
+            result.m_Data[x][y] = m_Data[x][y] + scalar;
+        }
+    }
+}
 
 template <class T, unsigned int X, unsigned int Y>
 void StaticMatrix<T, X, Y>::operator-=(T scalar)
@@ -132,6 +143,17 @@ StaticMatrix<T, X, Y> StaticMatrix<T, X, Y>::operator-(T scalar) const
     }
 
     return result;
+}
+template <class T, unsigned int X, unsigned int Y>
+void StaticMatrix<T, X, Y>::sub(T scalar, StaticMatrix<T, X, Y> &result) const
+{
+    for (size_t x = 0; x < X; x++)
+    {
+        for (size_t y = 0; y < Y; y++)
+        {
+            result.m_Data[x][y] = m_Data[x][y] - scalar;
+        }
+    }
 }
 
 template <class T, unsigned int X, unsigned int Y>

@@ -31,14 +31,14 @@ int main()
     std::cout << m5 << std::endl;
     std::cout << m5.det() << std::endl;
 
-    StaticVector<float, 3> sv({1, 2, 3});
-    StaticVector<float, 3> sv2({1, 1, 1});
+    StaticVector<float, 3> sv({1, 0, 0});
+    StaticVector<float, 3> sv2({0, 0, 1});
+    StaticVector<float, 3> sv3(false);
 
-    auto x = sv * 2;
+    std::cout << "------------------" << std::endl;
+    sv.cross(sv2, sv3);
 
-    std::cout << sv.cross(sv2) << std::endl;
-    std::cout << sv << std::endl;
-    std::cout << x << std::endl;
+    std::cout << sv3 << std::endl;
 
     StaticMatrix<float, 4, 3> id;
     id.identity();
@@ -54,4 +54,12 @@ int main()
     StaticVector<float, 3> c({1, 0, 0});
     StaticVector<float, 3> c2({0, 1, 0});
     std::cout << c.cross(c2) / 100 << std::endl;
+
+    StaticMatrix<float, 3, 3> mat({{{1, 1, -1},
+                                    {0, 1, 3},
+                                    {-1, 0, -2}}});
+    StaticVector<float, 3> erg({9, 3, 2});
+
+    std::cout << (mat.inverse() * erg) << std::endl;
+    std::cout << sizeof(mat) << std::endl;
 }

@@ -54,17 +54,7 @@ void StaticVector<T, N>::normalize()
         item *= factor;
     }
 }
-template <class T, unsigned int N>
-T StaticVector<T, N>::dot(const StaticVector<T, N> &other) const
-{
-    T sum = T(0);
 
-    for (size_t i = 0; i < N; i++)
-    {
-        sum += m_Data[i] * other.m_Data[i];
-    }
-    return sum;
-}
 template <class T, unsigned int N>
 StaticVector<T, 3> StaticVector<T, N>::cross(const StaticVector<T, 3> &other) const
 {
@@ -73,6 +63,14 @@ StaticVector<T, 3> StaticVector<T, N>::cross(const StaticVector<T, 3> &other) co
     result.m_Data[1] = m_Data[2] * other.m_Data[0] - m_Data[0] * other.m_Data[2];
     result.m_Data[2] = m_Data[0] * other.m_Data[1] - m_Data[1] * other.m_Data[0];
     return result;
+}
+
+template <class T, unsigned int N>
+void StaticVector<T, N>::cross(const StaticVector<T, 3> &other, StaticVector<T, 3> &result) const
+{
+    result.m_Data[0] = m_Data[1] * other.m_Data[2] - m_Data[2] * other.m_Data[0];
+    result.m_Data[1] = m_Data[2] * other.m_Data[0] - m_Data[0] * other.m_Data[2];
+    result.m_Data[2] = m_Data[0] * other.m_Data[1] - m_Data[1] * other.m_Data[0];
 }
 
 template <class T, unsigned int N>
@@ -96,6 +94,15 @@ StaticVector<T, N> StaticVector<T, N>::operator+(T scalar) const
 }
 
 template <class T, unsigned int N>
+void StaticVector<T, N>::add(T scalar, StaticVector<T, N> &result) const
+{
+    for (size_t i = 0; i < N; i++)
+    {
+        result.m_Data[i] = m_Data[i] + scalar;
+    }
+}
+
+template <class T, unsigned int N>
 void StaticVector<T, N>::operator-=(T scalar)
 {
     for (auto &&item : m_Data)
@@ -106,7 +113,6 @@ void StaticVector<T, N>::operator-=(T scalar)
 template <class T, unsigned int N>
 StaticVector<T, N> StaticVector<T, N>::operator-(T scalar) const
 {
-
     StaticVector<T, N> result;
     for (size_t i = 0; i < N; i++)
     {
@@ -114,6 +120,15 @@ StaticVector<T, N> StaticVector<T, N>::operator-(T scalar) const
     }
 
     return result;
+}
+
+template <class T, unsigned int N>
+void StaticVector<T, N>::sub(T scalar, StaticVector<T, N> &result) const
+{
+    for (size_t i = 0; i < N; i++)
+    {
+        result.m_Data[i] = m_Data[i] - scalar;
+    }
 }
 
 template <class T, unsigned int N>
@@ -134,6 +149,27 @@ StaticVector<T, N> StaticVector<T, N>::operator*(T scalar) const
     }
 
     return result;
+}
+
+template <class T, unsigned int N>
+void StaticVector<T, N>::mul(T scalar, StaticVector<T, N> &result) const
+{
+    for (size_t i = 0; i < N; i++)
+    {
+        result.m_Data[i] = m_Data[i] * scalar;
+    }
+}
+
+template <class T, unsigned int N>
+T StaticVector<T, N>::dot(const StaticVector<T, N> &other) const
+{
+    T sum = T(0);
+
+    for (size_t i = 0; i < N; i++)
+    {
+        sum += m_Data[i] * other.m_Data[i];
+    }
+    return sum;
 }
 
 template <class T, unsigned int N>
@@ -171,14 +207,33 @@ StaticVector<T, N> StaticVector<T, N>::operator/(T scalar) const
 }
 
 template <class T, unsigned int N>
+void StaticVector<T, N>::div(T scalar, StaticVector<T, N> &result) const
+{
+    T factor = T(1) / scalar;
+    for (size_t i = 0; i < N; i++)
+    {
+        result.m_Data[i] = m_Data[i] * factor;
+    }
+}
+
+template <class T, unsigned int N>
 StaticMatrix<T, N, 1> StaticVector<T, N>::transpose() const
 {
     StaticMatrix<T, N, 1> result(false);
     for (size_t i = 0; i < N; i++)
     {
-        result[0][i] = m_Data[i];
+        result.m_Data[0][i] = m_Data[i];
     }
     return result;
+}
+
+template <class T, unsigned int N>
+void StaticVector<T, N>::transpose(StaticMatrix<T, N, 1> &result) const
+{
+    for (size_t i = 0; i < N; i++)
+    {
+        result.m_Data[0][i] = m_Data[i];
+    }
 }
 
 template <class T, unsigned int N>
