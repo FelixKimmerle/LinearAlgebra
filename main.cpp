@@ -1,10 +1,12 @@
 #include <iostream>
 #include "StaticVector.hpp"
 #include "StaticMatrix.hpp"
-
+#include "DynamicVector.hpp"
 int main()
 {
-    StaticMatrix<float, 3, 4> m({{{0, 1, 2, 3},
+    DynamicVector<float> dv({1,2,3,4});
+    std::cout << dv << std::endl;
+    /*StaticMatrix<float, 3, 4> m({{{0, 1, 2, 3},
                                   {4, 5, 6, 7},
                                   {8, 9, 10, 11}}});
 
@@ -68,4 +70,5 @@ int main()
     StaticMatrix<float, 4, 4> madjres;
     madjinv.cross(madj, madjres);
     std::cout << madjres << std::endl;
+    */
 }
