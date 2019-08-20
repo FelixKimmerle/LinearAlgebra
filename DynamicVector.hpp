@@ -53,6 +53,12 @@ public:
     //StaticMatrix<T, N, 1> transpose() const;
     //void transpose(StaticMatrix<T, N, 1> &result) const;
 
+    void push_back(T p_Value);
+    void pop_back();
+
+    void Append(const DynamicVector<T> &other);
+    DynamicVector Combine(const DynamicVector<T> &other);
+
     DynamicVector<T> &operator=(const std::vector<T> &init);
 
     friend std::ostream &operator<<<>(std::ostream &out, const DynamicVector<T> &p_DynamicVector);

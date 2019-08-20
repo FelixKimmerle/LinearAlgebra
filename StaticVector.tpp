@@ -235,6 +235,23 @@ void StaticVector<T, N>::transpose(StaticMatrix<T, N, 1> &result) const
         result.m_Data[0][i] = m_Data[i];
     }
 }
+template <class T, unsigned int N>
+template <unsigned int NO>
+StaticVector<T, N + NO> StaticVector<T, N>::Combine(const StaticVector<T, NO> &other)
+{
+    StaticVector<T, N + NO> result(false);
+    unsigned int i;
+    for (i = 0; i < N; i++)
+    {
+        result.m_Data[i] = m_Data[i];
+    }
+    for (unsigned int x = 0; x < NO; x++)
+    {
+        result.m_Data[x+i] = other.m_Data[x];
+    }
+    
+    return result;
+}
 
 template <class T, unsigned int N>
 StaticVector<T, N> &StaticVector<T, N>::operator=(const std::array<T, N> &init)

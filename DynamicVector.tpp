@@ -1,5 +1,5 @@
 #include "DynamicVector.hpp"
-
+#include "MathException.hpp"
 template <class T>
 DynamicVector<T>::DynamicVector(unsigned int p_uiSize, bool doinit) : m_uiSize(p_uiSize)
 {
@@ -77,19 +77,33 @@ void DynamicVector<T>::normalize()
 template <class T>
 DynamicVector<T> DynamicVector<T>::cross(const DynamicVector<T> &other) const
 {
-    DynamicVector<T> result(3);
-    result.m_Data[0] = m_Data[1] * other.m_Data[2] - m_Data[2] * other.m_Data[0];
-    result.m_Data[1] = m_Data[2] * other.m_Data[0] - m_Data[0] * other.m_Data[2];
-    result.m_Data[2] = m_Data[0] * other.m_Data[1] - m_Data[1] * other.m_Data[0];
-    return result;
+    if (m_uiSize == 3 && other.m_uiSize == 3)
+    {
+        DynamicVector<T> result(3);
+        result.m_Data[0] = m_Data[1] * other.m_Data[2] - m_Data[2] * other.m_Data[0];
+        result.m_Data[1] = m_Data[2] * other.m_Data[0] - m_Data[0] * other.m_Data[2];
+        result.m_Data[2] = m_Data[0] * other.m_Data[1] - m_Data[1] * other.m_Data[0];
+        return result;
+    }
+    else
+    {
+        throw MathException("Both vectors must have exactly 3 entrys.");
+    }
 }
 
 template <class T>
 void DynamicVector<T>::cross(const DynamicVector<T> &other, DynamicVector<T> &result) const
 {
-    result.m_Data[0] = m_Data[1] * other.m_Data[2] - m_Data[2] * other.m_Data[0];
-    result.m_Data[1] = m_Data[2] * other.m_Data[0] - m_Data[0] * other.m_Data[2];
-    result.m_Data[2] = m_Data[0] * other.m_Data[1] - m_Data[1] * other.m_Data[0];
+    if (m_uiSize == 3 && other.m_uiSize == 3)
+    {
+        result.m_Data[0] = m_Data[1] * other.m_Data[2] - m_Data[2] * other.m_Data[0];
+        result.m_Data[1] = m_Data[2] * other.m_Data[0] - m_Data[0] * other.m_Data[2];
+        result.m_Data[2] = m_Data[0] * other.m_Data[1] - m_Data[1] * other.m_Data[0];
+    }
+    else
+    {
+        throw MathException("Both vectors must have exactly 3 entrys.");
+    }
 }
 
 template <class T>
@@ -195,13 +209,19 @@ T DynamicVector<T>::dot(const DynamicVector<T> &other) const
 template <class T>
 T DynamicVector<T>::operator*(const DynamicVector<T> &other) const
 {
-    T sum = T(0);
-
-    for (size_t i = 0; i < m_uiSize; i++)
+    if (m_uiSize == other.m_uiSize)
     {
-        sum += m_Data[i] * other.m_Data[i];
+        T sum = T(0);
+        for (size_t i = 0; i < m_uiSize; i++)
+        {
+            sum += m_Data[i] * other.m_Data[i];
+        }
+        return sum;
     }
-    return sum;
+    else
+    {
+        throw MathException("Vectors must be equal size");
+    }
 }
 
 template <class T>
@@ -257,6 +277,28 @@ void StaticVector<T, N>::transpose(StaticMatrix<T, N, 1> &result) const
     }
 }
 */
+
+template <class T>
+void DynamicVector<T>::push_back(T p_Value)
+{
+    m_Data.push_back(p_Value);
+    m_uiSize++;
+}
+
+template <class T>
+void DynamicVector<T>::pop_back()
+{
+    m_Data.pop_back();
+    m_uiSize--;
+}
+
+template <class T>
+void DynamicVector<T>::Append(const DynamicVector<T> &other)
+{
+    m_uiSize += other.m_uiSize;
+    m_Data.reserve(m_uiSize);
+    m_Data.insert(m_Data.end(),other.m_Data.begin(),other.m_Data.end());
+}
 
 template <class T>
 DynamicVector<T> &DynamicVector<T>::operator=(const std::vector<T> &init)

@@ -16,6 +16,9 @@ class StaticVector
 private:
     std::array<T, N> m_Data;
 
+    template <class TT,unsigned int NO>
+    friend class StaticVector;
+
 public:
     T &operator[](unsigned int index);
     T operator[](unsigned int index) const;
@@ -48,6 +51,9 @@ public:
 
     StaticMatrix<T, N, 1> transpose() const;
     void transpose(StaticMatrix<T, N, 1> &result) const;
+
+    template <unsigned int NO>
+    StaticVector<T, N + NO> Combine(const StaticVector<T, NO> &other);
 
     StaticVector<T, N> &operator=(const std::array<T, N> &init);
 

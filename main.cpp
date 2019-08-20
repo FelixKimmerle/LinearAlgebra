@@ -4,8 +4,18 @@
 #include "DynamicVector.hpp"
 int main()
 {
-    DynamicVector<float> dv({1,2,3,4});
+    DynamicVector<float> dv({1, 0, 0});
     std::cout << dv << std::endl;
+    DynamicVector<float> dv2({0, 1, 0});
+    std::cout << dv2 << std::endl;
+    std::cout << dv.cross(dv2) << std::endl;
+    dv.Append(dv2);
+    std::cout << dv << std::endl;
+
+    StaticVector<float, 2> a({5, 7});
+    StaticVector<float, 3> a2({2, 3, 4});
+
+    std::cout << a.Combine(a2) << std::endl;
     /*StaticMatrix<float, 3, 4> m({{{0, 1, 2, 3},
                                   {4, 5, 6, 7},
                                   {8, 9, 10, 11}}});
