@@ -59,7 +59,7 @@ template <class T, unsigned int N>
 StaticVector<T, 3> StaticVector<T, N>::cross(const StaticVector<T, 3> &other) const
 {
     StaticVector<T, 3> result;
-    result.m_Data[0] = m_Data[1] * other.m_Data[2] - m_Data[2] * other.m_Data[0];
+    result.m_Data[0] = m_Data[1] * other.m_Data[2] - m_Data[2] * other.m_Data[1];
     result.m_Data[1] = m_Data[2] * other.m_Data[0] - m_Data[0] * other.m_Data[2];
     result.m_Data[2] = m_Data[0] * other.m_Data[1] - m_Data[1] * other.m_Data[0];
     return result;
@@ -68,7 +68,7 @@ StaticVector<T, 3> StaticVector<T, N>::cross(const StaticVector<T, 3> &other) co
 template <class T, unsigned int N>
 void StaticVector<T, N>::cross(const StaticVector<T, 3> &other, StaticVector<T, 3> &result) const
 {
-    result.m_Data[0] = m_Data[1] * other.m_Data[2] - m_Data[2] * other.m_Data[0];
+    result.m_Data[0] = m_Data[1] * other.m_Data[2] - m_Data[2] * other.m_Data[1];
     result.m_Data[1] = m_Data[2] * other.m_Data[0] - m_Data[0] * other.m_Data[2];
     result.m_Data[2] = m_Data[0] * other.m_Data[1] - m_Data[1] * other.m_Data[0];
 }
@@ -171,7 +171,6 @@ T StaticVector<T, N>::dot(const StaticVector<T, N> &other) const
     }
     return sum;
 }
-
 template <class T, unsigned int N>
 T StaticVector<T, N>::operator*(const StaticVector<T, N> &other) const
 {
@@ -247,9 +246,9 @@ StaticVector<T, N + NO> StaticVector<T, N>::Combine(const StaticVector<T, NO> &o
     }
     for (unsigned int x = 0; x < NO; x++)
     {
-        result.m_Data[x+i] = other.m_Data[x];
+        result.m_Data[x + i] = other.m_Data[x];
     }
-    
+
     return result;
 }
 
@@ -258,6 +257,11 @@ StaticVector<T, N> &StaticVector<T, N>::operator=(const std::array<T, N> &init)
 {
     m_Data = init;
     return *this;
+}
+template <class T, unsigned int N>
+bool StaticVector<T, N>::operator==(const StaticVector<T, N> &other)const
+{
+    return m_Data == other.m_Data;
 }
 
 template <class T, unsigned int N>
@@ -320,5 +324,4 @@ template <class T, unsigned int N>
 StaticVector<T, N>::StaticVector(const StaticVector<T, N> &other)
 {
     m_Data = other.m_Data;
-    std::cout << "Vector Coppy :|" << std::endl;
 }

@@ -648,5 +648,4 @@ template <class T, unsigned int X, unsigned int Y>
 StaticMatrix<T, X, Y>::StaticMatrix(const StaticMatrix<T, X, Y> &other)
 {
     m_Data = other.m_Data;
-    std::cout << "Matrix Coppy :|" << std::endl;
 }

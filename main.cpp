@@ -1,7 +1,18 @@
 #include <iostream>
-#include "StaticVector.hpp"
-#include "StaticMatrix.hpp"
-#include "DynamicVector.hpp"
+#define CATCH_CONFIG_RUNNER
+#include "test/catch.hpp"
+#include <random>
+
+
+int main(int argc, char *const argv[])
+{
+    srand(time(0));
+    // global setup...
+    int result = Catch::Session().run(argc, argv);
+    // global clean-up...
+    return result;
+}
+/*
 int main()
 {
     DynamicVector<float> dv({1, 0, 0});
@@ -16,7 +27,9 @@ int main()
     StaticVector<float, 3> a2({2, 3, 4});
 
     std::cout << a.Combine(a2) << std::endl;
-    /*StaticMatrix<float, 3, 4> m({{{0, 1, 2, 3},
+
+    
+    StaticMatrix<float, 3, 4> m({{{0, 1, 2, 3},
                                   {4, 5, 6, 7},
                                   {8, 9, 10, 11}}});
 
@@ -80,5 +93,6 @@ int main()
     StaticMatrix<float, 4, 4> madjres;
     madjinv.cross(madj, madjres);
     std::cout << madjres << std::endl;
-    */
+    
 }
+*/

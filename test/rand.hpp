@@ -1,0 +1,1 @@
+float randinrange(float min, float max);

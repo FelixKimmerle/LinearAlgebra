@@ -56,6 +56,7 @@ public:
     StaticVector<T, N + NO> Combine(const StaticVector<T, NO> &other);
 
     StaticVector<T, N> &operator=(const std::array<T, N> &init);
+    bool operator==(const StaticVector<T,N> &other)const;
 
     friend std::ostream &operator<<<>(std::ostream &out, const StaticVector<T, N> &p_Vector);
 
