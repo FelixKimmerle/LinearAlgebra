@@ -1,21 +1,20 @@
 #include <iostream>
-#define CATCH_CONFIG_RUNNER
-#include "test/catch.hpp"
 #include <random>
+#include "DynamicMatrix.hpp"
 
 
 int main(int argc, char *const argv[])
 {
-    srand(time(0));
-    // global setup...
-    int result = Catch::Session().run(argc, argv);
-    // global clean-up...
-    return result;
+
+    DynamicMatrix<float> m(3,3);
+    std::cout << m << std::endl;
+    return 0;
 }
 /*
 int main()
 {
     DynamicVector<float> dv({1, 0, 0});
+
     std::cout << dv << std::endl;
     DynamicVector<float> dv2({0, 1, 0});
     std::cout << dv2 << std::endl;
