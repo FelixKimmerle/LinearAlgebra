@@ -1,5 +1,8 @@
 #include "DynamicVector.hpp"
 #include "MathException.hpp"
+#include <cmath>
+#include <iomanip>
+
 template <class T>
 DynamicVector<T>::DynamicVector(unsigned int p_uiSize, bool doinit) : m_uiSize(p_uiSize)
 {
