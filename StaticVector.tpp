@@ -5,6 +5,17 @@
 #include <cmath>
 
 template <class T, unsigned int N>
+StaticVector<T, N> StaticVector<T, N>::operator+(const StaticVector<T, N> &other)const
+{
+    StaticVector<T, N> result;
+    for (size_t i = 0; i < N; i++)
+    {
+        result.m_Data[i] = m_Data[i] + other.m_Data[i];
+    }
+    return result;
+}
+
+template <class T, unsigned int N>
 T &StaticVector<T, N>::operator[](unsigned int index)
 {
     return m_Data[index];
@@ -53,6 +64,18 @@ void StaticVector<T, N>::normalize()
     {
         item *= factor;
     }
+}
+template <class T, unsigned int N>
+StaticVector<T, N> StaticVector<T, N>::normalized()const
+{
+    StaticVector<T, N> result;
+    T factor = T(1) / Length();
+    for (size_t i = 0; i < N; i++)
+    {
+        result.m_Data[i] = m_Data[i] * factor;
+    }
+    return result;
+    
 }
 
 template <class T, unsigned int N>
@@ -259,7 +282,7 @@ StaticVector<T, N> &StaticVector<T, N>::operator=(const std::array<T, N> &init)
     return *this;
 }
 template <class T, unsigned int N>
-bool StaticVector<T, N>::operator==(const StaticVector<T, N> &other)const
+bool StaticVector<T, N>::operator==(const StaticVector<T, N> &other) const
 {
     return m_Data == other.m_Data;
 }

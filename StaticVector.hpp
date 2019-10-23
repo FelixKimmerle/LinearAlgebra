@@ -27,12 +27,15 @@ public:
     unsigned int Size() const;
     T Length() const;
     void normalize();
+    StaticVector<T, N> normalized()const;
     StaticVector<T, 3> cross(const StaticVector<T, 3> &other) const;
     void cross(const StaticVector<T, 3> &other, StaticVector<T, 3> &result) const;
 
     void operator+=(T scalar);
     StaticVector<T, N> operator+(T scalar) const;
     void add(T scalar, StaticVector<T, N> &result) const;
+
+    StaticVector<T,N> operator+(const StaticVector<T,N> &other)const;
 
     void operator-=(T scalar);
     StaticVector<T, N> operator-(T scalar) const;
