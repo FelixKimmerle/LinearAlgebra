@@ -225,6 +225,15 @@ void StaticVector<T, N>::operator/=(T scalar)
     }
 }
 
+template <class T, unsigned int N>
+void StaticVector<T, N>::operator+=(const StaticVector<T, N> &other)
+{
+    for(unsigned int i = 0; i < N; i++)
+    {
+        m_Data[i] += other.m_Data[i];
+    }
+}
+
 
 template <class T, unsigned int N>
 void StaticVector<T, N>::normalize()
